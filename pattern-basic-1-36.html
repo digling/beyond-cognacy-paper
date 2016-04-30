@@ -1,0 +1,640 @@
+<html>
+<head>
+  <title>LingPy Tree Class</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="<++>" />
+</head>
+<body>
+  <style>.node-container {
+  display: flex;
+  flex-direction: row;
+  border: 0px solid gray;
+  padding: 0px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  align-content: stretch; 
+  align-items: center;
+  background: rgba(0,0,0,0.10);
+  border-radius: 50px;
+}
+.node-label {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid CornflowerBlue;
+  padding: 10px;
+  margin-left: 5px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  justify-content: center;
+  flex-basis:100px;
+  background: LightBlue;
+  border-radius: 25px;
+}
+.node-content {
+  display: flex;
+  flex-direction: column;
+  border-left: 0px dotted Crimson;
+  padding: 0px;
+  margin-bottom: 0px;
+  flex-grow: 2;
+  flex-shrink: 2;
+}
+
+.node-leave {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  border-top: 1px dotted black;
+}
+.inner_leave {
+	float: right;
+	width: 250px;
+	display: table-cell;
+     border: 2px solid Green;
+     position: relative;
+     background: lightgreen;
+     right: 0px;
+  margin: 10px;
+  padding: 0px;
+
+
+}
+
+
+#popup {
+	position: fixed;
+	top: 30;
+	right: 30;
+	background: white;
+	border: 2px solid Crimson;
+	padding: 5px;
+	display: none;
+	cursor: pointer;
+}
+#popup table {
+	border: 2px solid black;
+}
+#popup table th {
+	border: 1px solid gray;
+}
+#popup table td {
+	border: 1px solid lightgray;
+}
+</style>
+  <script>
+var TREE = {
+  "Shanghai": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Shanghai",
+    "parent": "(Shanghai,Shanghai_B)",
+    "leave": true,
+    "root": false
+  },
+  "Xiamen": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Xiamen",
+    "parent": "(Xiamen,Zhanping)",
+    "leave": true,
+    "root": false
+  },
+  "Beijing": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Beijing",
+    "parent": "(Beijing,(Taiyuan,Yuci))",
+    "leave": true,
+    "root": false
+  },
+  "Zhanping": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Zhanping",
+    "parent": "(Xiamen,Zhanping)",
+    "leave": true,
+    "root": false
+  },
+  "(Fuzhou,(Taibei,(Xiamen,Zhanping)))": {
+    "children": [
+      "Fuzhou",
+      "(Taibei,(Xiamen,Zhanping))"
+    ],
+    "branch_length": 0,
+    "label": "Min",
+    "parent": "((Fuzhou,(Taibei,(Xiamen,Zhanping))),((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))))",
+    "leave": false,
+    "root": false
+  },
+  "(Changsha,Shuangfeng)": {
+    "children": [
+      "Changsha",
+      "Shuangfeng"
+    ],
+    "branch_length": 0,
+    "label": "Xiang",
+    "parent": "((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))",
+    "leave": false,
+    "root": false
+  },
+  "Nanchang": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Nanchang",
+    "parent": "(Nanchang,Anyi)",
+    "leave": true,
+    "root": false
+  },
+  "(Yingshan,Wuhan)": {
+    "children": [
+      "Yingshan",
+      "Wuhan"
+    ],
+    "branch_length": "0",
+    "label": "edge_11",
+    "parent": "((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))",
+    "leave": false,
+    "root": false
+  },
+  "Guangzhou": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Guangzhou",
+    "parent": "(Guangzhou,(Meixian,Lianchang))",
+    "leave": true,
+    "root": false
+  },
+  "(Beijing,(Taiyuan,Yuci))": {
+    "children": [
+      "Beijing",
+      "(Taiyuan,Yuci)"
+    ],
+    "branch_length": "0",
+    "label": "edge_13",
+    "parent": "(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))",
+    "leave": false,
+    "root": false
+  },
+  "Yingshan": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Yingshan",
+    "parent": "(Yingshan,Wuhan)",
+    "leave": true,
+    "root": false
+  },
+  "Ningbo": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Ningbo",
+    "parent": "(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))",
+    "leave": true,
+    "root": false
+  },
+  "Yuci": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Yuci",
+    "parent": "(Taiyuan,Yuci)",
+    "leave": true,
+    "root": false
+  },
+  "(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))": {
+    "children": [
+      "Ningxia",
+      "Chengdu",
+      "(Beijing,(Taiyuan,Yuci))"
+    ],
+    "branch_length": "0",
+    "label": "edge_12",
+    "parent": "((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))",
+    "leave": false,
+    "root": false
+  },
+  "(Suzhou,(Shanghai,Shanghai_B))": {
+    "children": [
+      "Suzhou",
+      "(Shanghai,Shanghai_B)"
+    ],
+    "branch_length": "0",
+    "label": "edge_9",
+    "parent": "(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))",
+    "leave": false,
+    "root": false
+  },
+  "((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))))": {
+    "children": [
+      "(Guangzhou,(Meixian,Lianchang))",
+      "((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))"
+    ],
+    "branch_length": "0",
+    "label": "edge_1",
+    "parent": "((Fuzhou,(Taibei,(Xiamen,Zhanping))),((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))))",
+    "leave": false,
+    "root": false
+  },
+  "Wuhan": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Wuhan",
+    "parent": "(Yingshan,Wuhan)",
+    "leave": true,
+    "root": false
+  },
+  "Shanghai_B": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Shanghai_B",
+    "parent": "(Shanghai,Shanghai_B)",
+    "leave": true,
+    "root": false
+  },
+  "(Xiamen,Zhanping)": {
+    "children": [
+      "Xiamen",
+      "Zhanping"
+    ],
+    "branch_length": "0",
+    "label": "edge_5",
+    "parent": "(Taibei,(Xiamen,Zhanping))",
+    "leave": false,
+    "root": false
+  },
+  "Ningxia": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Ningxia",
+    "parent": "(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))",
+    "leave": true,
+    "root": false
+  },
+  "Meixian": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Meixian",
+    "parent": "(Meixian,Lianchang)",
+    "leave": true,
+    "root": false
+  },
+  "((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))": {
+    "children": [
+      "(Yingshan,Wuhan)",
+      "(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))"
+    ],
+    "branch_length": 0,
+    "label": "Guanhua",
+    "parent": "((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))",
+    "leave": false,
+    "root": false
+  },
+  "(Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B))))": {
+    "children": [
+      "Wenzhou",
+      "(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))"
+    ],
+    "branch_length": 0,
+    "label": "Wu",
+    "parent": "((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))",
+    "leave": false,
+    "root": false
+  },
+  "(Nanchang,Anyi)": {
+    "children": [
+      "Nanchang",
+      "Anyi"
+    ],
+    "branch_length": 0,
+    "label": "Gan",
+    "parent": "((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))",
+    "leave": false,
+    "root": false
+  },
+  "Anyi": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Anyi",
+    "parent": "(Nanchang,Anyi)",
+    "leave": true,
+    "root": false
+  },
+  "((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))": {
+    "children": [
+      "(Nanchang,Anyi)",
+      "((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))"
+    ],
+    "branch_length": "0",
+    "label": "edge_6",
+    "parent": "((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))",
+    "leave": false,
+    "root": false
+  },
+  "Taiyuan": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Taiyuan",
+    "parent": "(Taiyuan,Yuci)",
+    "leave": true,
+    "root": false
+  },
+  "(Meixian,Lianchang)": {
+    "children": [
+      "Meixian",
+      "Lianchang"
+    ],
+    "branch_length": 0,
+    "label": "Hakka",
+    "parent": "(Guangzhou,(Meixian,Lianchang))",
+    "leave": false,
+    "root": false
+  },
+  "Changsha": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Changsha",
+    "parent": "(Changsha,Shuangfeng)",
+    "leave": true,
+    "root": false
+  },
+  "(Taiyuan,Yuci)": {
+    "children": [
+      "Taiyuan",
+      "Yuci"
+    ],
+    "branch_length": "0",
+    "label": "edge_14",
+    "parent": "(Beijing,(Taiyuan,Yuci))",
+    "leave": false,
+    "root": false
+  },
+  "Chengdu": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Chengdu",
+    "parent": "(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))",
+    "leave": true,
+    "root": false
+  },
+  "(Guangzhou,(Meixian,Lianchang))": {
+    "children": [
+      "Guangzhou",
+      "(Meixian,Lianchang)"
+    ],
+    "branch_length": "0",
+    "label": "edge_3",
+    "parent": "((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))))",
+    "leave": false,
+    "root": false
+  },
+  "Suzhou": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Suzhou",
+    "parent": "(Suzhou,(Shanghai,Shanghai_B))",
+    "leave": true,
+    "root": false
+  },
+  "leaves": [
+    "Fuzhou",
+    "Taibei",
+    "Guangzhou",
+    "Xiamen",
+    "Zhanping",
+    "Meixian",
+    "Lianchang",
+    "Wenzhou",
+    "Ningbo",
+    "Nanchang",
+    "Anyi",
+    "Suzhou",
+    "Changsha",
+    "Shuangfeng",
+    "Shanghai",
+    "Shanghai_B",
+    "Yingshan",
+    "Wuhan",
+    "Ningxia",
+    "Chengdu",
+    "Beijing",
+    "Taiyuan",
+    "Yuci"
+  ],
+  "((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))": {
+    "children": [
+      "(Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B))))",
+      "((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))"
+    ],
+    "branch_length": "0",
+    "label": "edge_4",
+    "parent": "((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))))",
+    "leave": false,
+    "root": false
+  },
+  "(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))": {
+    "children": [
+      "Ningbo",
+      "(Suzhou,(Shanghai,Shanghai_B))"
+    ],
+    "branch_length": "0",
+    "label": "edge_7",
+    "parent": "(Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B))))",
+    "leave": false,
+    "root": false
+  },
+  "Taibei": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Taibei",
+    "parent": "(Taibei,(Xiamen,Zhanping))",
+    "leave": true,
+    "root": false
+  },
+  "nodes": [
+    "((Fuzhou,(Taibei,(Xiamen,Zhanping))),((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))))",
+    "(Fuzhou,(Taibei,(Xiamen,Zhanping)))",
+    "((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))))",
+    "Fuzhou",
+    "(Taibei,(Xiamen,Zhanping))",
+    "(Guangzhou,(Meixian,Lianchang))",
+    "((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))",
+    "Taibei",
+    "(Xiamen,Zhanping)",
+    "Guangzhou",
+    "(Meixian,Lianchang)",
+    "(Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B))))",
+    "((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))",
+    "Xiamen",
+    "Zhanping",
+    "Meixian",
+    "Lianchang",
+    "Wenzhou",
+    "(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))",
+    "(Nanchang,Anyi)",
+    "((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))",
+    "Ningbo",
+    "(Suzhou,(Shanghai,Shanghai_B))",
+    "Nanchang",
+    "Anyi",
+    "(Changsha,Shuangfeng)",
+    "((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))",
+    "Suzhou",
+    "(Shanghai,Shanghai_B)",
+    "Changsha",
+    "Shuangfeng",
+    "(Yingshan,Wuhan)",
+    "(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))",
+    "Shanghai",
+    "Shanghai_B",
+    "Yingshan",
+    "Wuhan",
+    "Ningxia",
+    "Chengdu",
+    "(Beijing,(Taiyuan,Yuci))",
+    "Beijing",
+    "(Taiyuan,Yuci)",
+    "Taiyuan",
+    "Yuci"
+  ],
+  "root": "((Fuzhou,(Taibei,(Xiamen,Zhanping))),((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))))",
+  "Fuzhou": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Fuzhou",
+    "parent": "(Fuzhou,(Taibei,(Xiamen,Zhanping)))",
+    "leave": true,
+    "root": false
+  },
+  "(Shanghai,Shanghai_B)": {
+    "children": [
+      "Shanghai",
+      "Shanghai_B"
+    ],
+    "branch_length": "0",
+    "label": "edge_10",
+    "parent": "(Suzhou,(Shanghai,Shanghai_B))",
+    "leave": false,
+    "root": false
+  },
+  "Shuangfeng": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Shuangfeng",
+    "parent": "(Changsha,Shuangfeng)",
+    "leave": true,
+    "root": false
+  },
+  "Lianchang": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Lianchang",
+    "parent": "(Meixian,Lianchang)",
+    "leave": true,
+    "root": false
+  },
+  "Wenzhou": {
+    "children": [],
+    "branch_length": "0",
+    "label": "Wenzhou",
+    "parent": "(Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B))))",
+    "leave": true,
+    "root": false
+  },
+  "((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))": {
+    "children": [
+      "(Changsha,Shuangfeng)",
+      "((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))"
+    ],
+    "branch_length": "0",
+    "label": "edge_8",
+    "parent": "((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))",
+    "leave": false,
+    "root": false
+  },
+  "(Taibei,(Xiamen,Zhanping))": {
+    "children": [
+      "Taibei",
+      "(Xiamen,Zhanping)"
+    ],
+    "branch_length": "0",
+    "label": "edge_2",
+    "parent": "(Fuzhou,(Taibei,(Xiamen,Zhanping)))",
+    "leave": false,
+    "root": false
+  },
+  "((Fuzhou,(Taibei,(Xiamen,Zhanping))),((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci)))))))))": {
+    "leave": false,
+    "children": [
+      "(Fuzhou,(Taibei,(Xiamen,Zhanping)))",
+      "((Guangzhou,(Meixian,Lianchang)),((Wenzhou,(Ningbo,(Suzhou,(Shanghai,Shanghai_B)))),((Nanchang,Anyi),((Changsha,Shuangfeng),((Yingshan,Wuhan),(Ningxia,Chengdu,(Beijing,(Taiyuan,Yuci))))))))"
+    ],
+    "root": true,
+    "label": "root",
+    "branch_length": "0"
+  }
+};
+
+function check_change() {
+  
+  /* start from root */
+  var queue = [TREE['root']];
+  while (queue) {
+    var current = queue.pop();
+    
+    // get the children
+    var children = TREE[current]['children'];
+
+    // check for current char
+    var this_node = document.getElementById(TREE[current]['label']+':label');
+    var this_content = this_node.dataset.value;
+
+    // iterate over children
+    for (var i=0,child; child=children[i]; i++) {
+      // get child value
+      var child_node = document.getElementById(TREE[child]['label']+':label');
+      var child_content = child_node.dataset.value;
+      
+      // change border if child not equals mother
+      // change border if child not equals mother
+      if (child_content != this_content) {
+	if (TREE[child]['leave']) {
+	  child_node.childNodes[0].style.border = '10px double black';
+	}
+	else {
+	  child_node.style.border = '10px double black';
+	}
+      }
+
+      queue.push(child);
+    }
+  }
+}
+
+
+
+</script>
+  <div><div class="node-container"><div id="root:label" data-value="背" class="node-label"><b>[背]</b> <sup>root</sup></div><div class="node-content"><div class="node-container"><div id="Min:label" data-value="背" class="node-label"><b>[背]</b> <sup>Min</sup></div><div class="node-content"><div id="Fuzhou:label" data-value="月聘" class="node-leave"><div class="inner_leave"><b>[月聘]</b> <sup>Fuzhou</sup></div></div>
+<div class="node-container"><div id="edge_2:label" data-value="胛脊" class="node-label"><b>[胛脊]</b> <sup>edge_2</sup></div><div class="node-content"><div id="Taibei:label" data-value="-" class="node-leave"><div class="inner_leave"><b>[-]</b> <sup>Taibei</sup></div></div>
+<div class="node-container"><div id="edge_5:label" data-value="胛脊" class="node-label"><b>[胛脊]</b> <sup>edge_5</sup></div><div class="node-content"><div id="Xiamen:label" data-value="胛脊" class="node-leave"><div class="inner_leave"><b>[胛脊]</b> <sup>Xiamen</sup></div></div>
+<div id="Zhanping:label" data-value="目脊" class="node-leave"><div class="inner_leave"><b>[目脊]</b> <sup>Zhanping</sup></div></div></div></div></div></div></div></div>
+<div class="node-container"><div id="edge_1:label" data-value="背" class="node-label"><b>[背]</b> <sup>edge_1</sup></div><div class="node-content"><div class="node-container"><div id="edge_3:label" data-value="背" class="node-label"><b>[背]</b> <sup>edge_3</sup></div><div class="node-content"><div id="Guangzhou:label" data-value="背脊" class="node-leave"><div class="inner_leave"><b>[背脊]</b> <sup>Guangzhou</sup></div></div>
+<div class="node-container"><div id="Hakka:label" data-value="背" class="node-label"><b>[背]</b> <sup>Hakka</sup></div><div class="node-content"><div id="Meixian:label" data-value="脊背" class="node-leave"><div class="inner_leave"><b>[脊背]</b> <sup>Meixian</sup></div></div>
+<div id="Lianchang:label" data-value="背脊" class="node-leave"><div class="inner_leave"><b>[背脊]</b> <sup>Lianchang</sup></div></div></div></div></div></div>
+<div class="node-container"><div id="edge_4:label" data-value="背" class="node-label"><b>[背]</b> <sup>edge_4</sup></div><div class="node-content"><div class="node-container"><div id="Wu:label" data-value="背" class="node-label"><b>[背]</b> <sup>Wu</sup></div><div class="node-content"><div id="Wenzhou:label" data-value="背脊身" class="node-leave"><div class="inner_leave"><b>[背脊身]</b> <sup>Wenzhou</sup></div></div>
+<div class="node-container"><div id="edge_7:label" data-value="背" class="node-label"><b>[背]</b> <sup>edge_7</sup></div><div class="node-content"><div id="Ningbo:label" data-value="背脊" class="node-leave"><div class="inner_leave"><b>[背脊]</b> <sup>Ningbo</sup></div></div>
+<div class="node-container"><div id="edge_9:label" data-value="背" class="node-label"><b>[背]</b> <sup>edge_9</sup></div><div class="node-content"><div id="Suzhou:label" data-value="背" class="node-leave"><div class="inner_leave"><b>[背]</b> <sup>Suzhou</sup></div></div>
+<div class="node-container"><div id="edge_10:label" data-value="背脊" class="node-label"><b>[背脊]</b> <sup>edge_10</sup></div><div class="node-content"><div id="Shanghai:label" data-value="背脊" class="node-leave"><div class="inner_leave"><b>[背脊]</b> <sup>Shanghai</sup></div></div>
+<div id="Shanghai_B:label" data-value="背脊" class="node-leave"><div class="inner_leave"><b>[背脊]</b> <sup>Shanghai_B</sup></div></div></div></div></div></div></div></div></div></div>
+<div class="node-container"><div id="edge_6:label" data-value="背" class="node-label"><b>[背]</b> <sup>edge_6</sup></div><div class="node-content"><div class="node-container"><div id="Gan:label" data-value="背" class="node-label"><b>[背]</b> <sup>Gan</sup></div><div class="node-content"><div id="Nanchang:label" data-value="背脊" class="node-leave"><div class="inner_leave"><b>[背脊]</b> <sup>Nanchang</sup></div></div>
+<div id="Anyi:label" data-value="背" class="node-leave"><div class="inner_leave"><b>[背]</b> <sup>Anyi</sup></div></div></div></div>
+<div class="node-container"><div id="edge_8:label" data-value="背" class="node-label"><b>[背]</b> <sup>edge_8</sup></div><div class="node-content"><div class="node-container"><div id="Xiang:label" data-value="背" class="node-label"><b>[背]</b> <sup>Xiang</sup></div><div class="node-content"><div id="Changsha:label" data-value="背" class="node-leave"><div class="inner_leave"><b>[背]</b> <sup>Changsha</sup></div></div>
+<div id="Shuangfeng:label" data-value="背" class="node-leave"><div class="inner_leave"><b>[背]</b> <sup>Shuangfeng</sup></div></div></div></div>
+<div class="node-container"><div id="Guanhua:label" data-value="背" class="node-label"><b>[背]</b> <sup>Guanhua</sup></div><div class="node-content"><div class="node-container"><div id="edge_11:label" data-value="背" class="node-label"><b>[背]</b> <sup>edge_11</sup></div><div class="node-content"><div id="Yingshan:label" data-value="背瑯" class="node-leave"><div class="inner_leave"><b>[背瑯]</b> <sup>Yingshan</sup></div></div>
+<div id="Wuhan:label" data-value="背" class="node-leave"><div class="inner_leave"><b>[背]</b> <sup>Wuhan</sup></div></div></div></div>
+<div class="node-container"><div id="edge_12:label" data-value="背" class="node-label"><b>[背]</b> <sup>edge_12</sup></div><div class="node-content"><div id="Ningxia:label" data-value="脊梁" class="node-leave"><div class="inner_leave"><b>[脊梁]</b> <sup>Ningxia</sup></div></div>
+<div id="Chengdu:label" data-value="背" class="node-leave"><div class="inner_leave"><b>[背]</b> <sup>Chengdu</sup></div></div>
+<div class="node-container"><div id="edge_13:label" data-value="脊背" class="node-label"><b>[脊背]</b> <sup>edge_13</sup></div><div class="node-content"><div id="Beijing:label" data-value="脊梁" class="node-leave"><div class="inner_leave"><b>[脊梁]</b> <sup>Beijing</sup></div></div>
+<div class="node-container"><div id="edge_14:label" data-value="脊背" class="node-label"><b>[脊背]</b> <sup>edge_14</sup></div><div class="node-content"><div id="Taiyuan:label" data-value="脊背" class="node-leave"><div class="inner_leave"><b>[脊背]</b> <sup>Taiyuan</sup></div></div>
+<div id="Yuci:label" data-value="脊背" class="node-leave"><div class="inner_leave"><b>[脊背]</b> <sup>Yuci</sup></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+  <div id="popup" onclick="this.style.display = 'none'"></div>
+  <script>check_change();</script>
+</body>
+</html>
