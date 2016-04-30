@@ -41,7 +41,6 @@ echo 'weighted directed multistate'
 python C_analyze.py matrix=pcd.multistate acr tree=P_southern_chinese.tre
 
 python C_analyze.py summarize
-cp R_table.tex ../draft/includes/
 
 if [ $# -eq 1 ]
   then
