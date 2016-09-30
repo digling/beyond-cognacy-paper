@@ -1,6 +1,8 @@
 Source code accompanying the paper "Beyond Cognacy: Historical relations between words"
 =======================================================================================
 
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.48936.svg)](http://dx.doi.org/10.5281/zenodo.48936)
+
 ## Requires
 
 * python
